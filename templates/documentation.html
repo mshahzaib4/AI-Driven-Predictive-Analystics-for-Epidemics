@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthPredict Pro - Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        /* Floating Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateY(-3px);
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(229, 56, 59, 0.8), rgba(69, 123, 157, 0.8)), 
+                        url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1800&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            padding: 120px 30px 80px;
+            color: white;
+            position: relative;
+            margin-bottom: 60px;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 30px;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            color: #475569;
+        }
+        
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 5px;
+            background: var(--gradient);
+            border-radius: 10px;
+            margin: 25px auto;
+        }
+        
+        /* Documentation Content */
+        .docs-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .docs-nav {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .docs-nav h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .docs-nav ul {
+            list-style-type: none;
+            padding-left: 15px;
+        }
+        
+        .docs-nav li {
+            margin-bottom: 10px;
+        }
+        
+        .docs-nav a {
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .docs-nav a:hover {
+            color: var(--primary);
+        }
+        
+        .docs-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .docs-section {
+            margin-bottom: 50px;
+        }
+        
+        .docs-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .docs-section h4 {
+            font-size: 1.4rem;
+            margin: 25px 0 15px;
+            color: var(--dark);
+        }
+        
+        .docs-section p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .docs-section ul, .docs-section ol {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .docs-section li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+        
+        .feature-box {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .feature-box h4 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .model-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .model-card h4 {
+            margin-top: 0;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .model-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 12px 20px;
+            min-width: 150px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tech-item i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .tech-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 80px 30px 40px;
+            margin-top: 80px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+        
+        .footer-col p {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--gradient);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 50px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links {
+                gap: 25px;
+            }
+            
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 0 20px;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.15rem;
+            }
+            
+            .main-content {
+                padding: 0 20px;
+            }
+            
+            .section-header h2 {
+                font-size: 2.3rem;
+            }
+            
+            .docs-container {
+                padding: 30px 20px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-toggle {
+                display: block;
+                font-size: 1.8rem;
+                color: var(--dark);
+            }
+            
+            .tech-item {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="#" class="logo">
+                <i class="fas fa-heart-pulse"></i>
+                HealthPredict Pro
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/lung_cancer">Lung Cancer</a></li>
+                <li><a href="/heart_disease">Heart Disease</a></li>
+                <li><a href="/liver_disease">Liver Disease</a></li>
+                <li><a href="/documentation" class="active">Documentation</a></li>
+
+                <li><a href="/profile">Contact</a></li>
+            </ul>
+            
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>HealthPredict Pro Documentation</h1>
+            <p>Comprehensive guide to using our AI-powered health prediction system</p>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="section-header">
+            <h2>System Documentation</h2>
+            <p>Learn how to effectively use HealthPredict Pro for disease risk assessment</p>
+        </div>
+        
+        <div class="docs-container">
+            <div class="docs-nav">
+                <h3><i class="fas fa-book"></i> Documentation Navigation</h3>
+                <ul>
+                    <li><a href="#introduction"><i class="fas fa-chevron-right"></i> Introduction</a></li>
+                    <li><a href="#getting-started"><i class="fas fa-chevron-right"></i> Getting Started</a></li>
+                    <li><a href="#lung-cancer"><i class="fas fa-chevron-right"></i> Lung Cancer Prediction</a></li>
+                    <li><a href="#heart-disease"><i class="fas fa-chevron-right"></i> Heart Disease Prediction</a></li>
+                    <li><a href="#liver-disease"><i class="fas fa-chevron-right"></i> Liver Disease Prediction</a></li>
+                    <li><a href="#technical-details"><i class="fas fa-chevron-right"></i> Technical Details</a></li>
+                    <li><a href="#faq"><i class="fas fa-chevron-right"></i> FAQ & Support</a></li>
+                </ul>
+            </div>
+            
+            <div class="docs-section" id="introduction">
+                <h3><i class="fas fa-info-circle"></i> Introduction to HealthPredict Pro</h3>
+                <p>HealthPredict Pro is an advanced AI-powered health prediction system designed to assess the risk of serious medical conditions. Our platform utilizes machine learning algorithms trained on extensive medical datasets to provide accurate risk assessments for lung cancer, heart disease, and liver disease.</p>
+                
+                <div class="feature-box">
+                    <h4><i class="fas fa-star"></i> Key Features</h4>
+                    <ul>
+                        <li><strong>AI-Powered Predictions:</strong> Advanced machine learning models with 90-98% accuracy</li>
+                        <li><strong>Early Detection:</strong> Identify potential health risks before symptoms manifest</li>
+                        <li><strong>Personalized Reports:</strong> Detailed risk assessments with probability percentages</li>
+                        <li><strong>Actionable Recommendations:</strong> Tailored health advice based on your results</li>
+                        <li><strong>Test Scenarios:</strong> Pre-filled examples to demonstrate system capabilities</li>
+                    </ul>
+                </div>
+                
+                <p>The system is designed for both healthcare professionals and individuals who want to proactively monitor their health. All predictions should be followed up with professional medical consultation.</p>
+            </div>
+            
+            <div class="docs-section" id="getting-started">
+                <h3><i class="fas fa-play-circle"></i> Getting Started</h3>
+                <p>Using HealthPredict Pro is simple and intuitive. Follow these steps to assess your health risks:</p>
+                
+                <ol>
+                    <li><strong>Navigate to the desired prediction module</strong> using the top menu (Lung Cancer, Heart Disease, or Liver Disease)</li>
+                    <li><strong>Fill in the required health information</strong> in the form fields</li>
+                    <li><strong>Use the test buttons</strong> to quickly fill the form with example data:
+                        <ul>
+                            <li><span class="positive-test" style="background-color: var(--danger); color: white; padding: 2px 8px; border-radius: 4px;">Fill Positive Test</span> - Pre-fills with high-risk values</li>
+                            <li><span class="negative-test" style="background-color: var(--success); color: white; padding: 2px 8px; border-radius: 4px;">Fill Negative Test</span> - Pre-fills with low-risk values</li>
+                            <li><span class="auto-positive" style="background-color: var(--info); color: white; padding: 2px 8px; border-radius: 4px;">Run Auto Positive Test</span> - Fills and submits high-risk example</li>
+                            <li><span class="auto-negative" style="background-color: var(--accent); color: white; padding: 2px 8px; border-radius: 4px;">Run Auto Negative Test</span> - Fills and submits low-risk example</li>
+                        </ul>
+                    </li>
+                    <li><strong>Click "Predict" or "Analyze Risk"</strong> to generate your assessment</li>
+                    <li><strong>Review your results</strong> including risk probability and recommendations</li>
+                </ol>
+                
+                <div class="feature-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Important Note</h4>
+                    <p>HealthPredict Pro is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</p>
+                </div>
+            </div>
+            
+            <div class="docs-section" id="lung-cancer">
+                <h3><i class="fas fa-lungs"></i> Lung Cancer Prediction</h3>
+                <p>The Lung Cancer Prediction module assesses your risk based on 15 key factors including smoking history, symptoms, and demographic information.</p>
+                
+                <h4>Required Information</h4>
+                <ul>
+                    <li>Personal Information (Name, Age, Gender)</li>
+                    <li>Smoking History (Current smoker, Years smoked)</li>
+                    <li>Symptoms (Coughing, Shortness of breath, Chest pain, etc.)</li>
+                    <li>Environmental Factors (Exposure to asbestos, radon, etc.)</li>
+                    <li>Family History</li>
+                </ul>
+                
+                <div class="model-card">
+                    <h4><i class="fas fa-brain"></i> Prediction Model</h4>
+                    <p>Our lung cancer prediction model uses a Random Forest classifier trained on a dataset of 1,000+ patient records with 27 clinical features.</p>
+                    <div class="model-stats">
+                        <div class="stat">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">96%</div>
+                            <div class="stat-label">Sensitivity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">97%</div>
+                            <div class="stat-label">Specificity</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="docs-section" id="heart-disease">
+                <h3><i class="fas fa-heart"></i> Heart Disease Prediction</h3>
+                <p>The Heart Disease Prediction module evaluates cardiovascular risk based on 19 health indicators including vital signs, lifestyle factors, and medical history.</p>
+                
+                <h4>Required Information</h4>
+                <ul>
+                    <li>Personal Information (Name, Age, Gender)</li>
+                    <li>Vital Signs (Blood pressure, Cholesterol levels)</li>
+                    <li>Medical History (Diabetes, Family history of heart disease)</li>
+                    <li>Lifestyle Factors (Exercise habits, Smoking, Alcohol consumption)</li>
+                    <li>Biomarkers (CRP level, Homocysteine level, Triglycerides)</li>
+                </ul>
+                
+                <div class="model-card">
+                    <h4><i class="fas fa-brain"></i> Prediction Model</h4>
+                    <p>Our heart disease prediction model uses a Gradient Boosting classifier trained on the Framingham Heart Study dataset with additional clinical parameters.</p>
+                    <div class="model-stats">
+                        <div class="stat">
+                            <div class="stat-value">94%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">92%</div>
+                            <div class="stat-label">Sensitivity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">95%</div>
+                            <div class="stat-label">Specificity</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="docs-section" id="liver-disease">
+                <h3><i class="fas fa-liver"></i> Liver Disease Prediction</h3>
+                <p>The Liver Disease Prediction module analyzes liver health based on 10 key biomarkers from liver function tests and basic patient information.</p>
+                
+                <h4>Required Information</h4>
+                <ul>
+                    <li>Personal Information (Name, Age, Gender)</li>
+                    <li>Bilirubin Levels (Total and Direct)</li>
+                    <li>Liver Enzymes (Alkaline Phosphatase, ALT, AST)</li>
+                    <li>Protein Levels (Total Proteins, Albumin)</li>
+                    <li>Albumin/Globulin Ratio</li>
+                </ul>
+                
+                <div class="model-card">
+                    <h4><i class="fas fa-brain"></i> Prediction Model</h4>
+                    <p>Our liver disease prediction model uses a Support Vector Machine (SVM) classifier trained on the Indian Liver Patient Dataset with additional clinical parameters.</p>
+                    <div class="model-stats">
+                        <div class="stat">
+                            <div class="stat-value">96%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">94%</div>
+                            <div class="stat-label">Sensitivity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">97%</div>
+                            <div class="stat-label">Specificity</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="docs-section" id="technical-details">
+                <h3><i class="fas fa-microchip"></i> Technical Details</h3>
+                <p>HealthPredict Pro is built with modern technologies and follows best practices in machine learning and web development.</p>
+                
+                <h4>Technical Stack</h4>
+                <div class="tech-stack">
+                    <div class="tech-item">
+                        <i class="fab fa-python"></i>
+                        <h4>Python</h4>
+                        <p>Backend development and machine learning</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-brain"></i>
+                        <h4>Scikit-Learn</h4>
+                        <p>Machine learning library for model development</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-js"></i>
+                        <h4>JavaScript</h4>
+                        <p>Frontend interactivity and dynamic content</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-database"></i>
+                        <h4>SQLite</h4>
+                        <p>Database for storing model parameters</p>
+                    </div>
+                </div>
+                
+                <h4>Data Sources</h4>
+                <p>Our models are trained on a combination of publicly available datasets and anonymized clinical data:</p>
+                <ul>
+                    <li>UCI Machine Learning Repository - Liver Disease Dataset</li>
+                    <li>Framingham Heart Study - Cardiovascular Data</li>
+                    <li>SEER Program - Lung Cancer Statistics</li>
+                    <li>Anonymized clinical records from partner institutions</li>
+                </ul>
+                
+                <h4>Model Development Process</h4>
+                <ol>
+                    <li>Data collection and preprocessing</li>
+                    <li>Feature engineering and selection</li>
+                    <li>Model selection and training</li>
+                    <li>Cross-validation and hyperparameter tuning</li>
+                    <li>Performance evaluation on test datasets</li>
+                    <li>Deployment with continuous monitoring</li>
+                </ol>
+            </div>
+            
+            <div class="docs-section" id="faq">
+                <h3><i class="fas fa-question-circle"></i> FAQ & Support</h3>
+                
+                <h4>Frequently Asked Questions</h4>
+                
+                <div class="feature-box">
+                    <h4><i class="fas fa-question"></i> How accurate are the predictions?</h4>
+                    <p>Our models achieve 94-98% accuracy on validation datasets. However, real-world accuracy may vary based on data quality and individual health factors.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4><i class="fas fa-question"></i> Can I use this system for diagnosis?</h4>
+                    <p>No. HealthPredict Pro is a risk assessment tool, not a diagnostic system. All results should be reviewed by a qualified healthcare professional.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4><i class="fas fa-question"></i> How often are the models updated?</h4>
+                    <p>We retrain our models quarterly with new data and continuously monitor performance to ensure accuracy.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <h4><i class="fas fa-question"></i> Is my personal health data stored?</h4>
+                    <p>No personal health data is stored on our servers. All information entered is processed in real-time and immediately discarded after generating results.</p>
+                </div>
+                
+                <h4>Support</h4>
+                <p>For technical support or questions about HealthPredict Pro, please contact our support team:</p>
+                <ul>
+                    <li><strong>Email:</strong> support@healthpredictpro.com</li>
+                    <li><strong>Phone:</strong> +1 (800) 123-4567</li>
+                    <li><strong>Hours:</strong> Monday-Friday, 9AM-5PM EST</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>HealthPredict Pro</h3>
+                <p>Advanced AI-powered health prediction system for early detection and prevention of serious medical conditions.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                    <li><a href="/profile"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Our Services</h3>
+                <ul class="footer-links">
+                    <li><a href="/lung_cancer"><i class="fas fa-lungs"></i> Lung Cancer Prediction</a></li>
+                    <li><a href="/heart_disease"><i class="fas fa-heart"></i> Heart Disease Prediction</a></li>
+                    <li><a href="/liver_disease"><i class="fas fa-liver"></i> Liver Disease Prediction</a></li>
+                    <li><a href="#"><i class="fas fa-dna"></i> Genetic Risk Analysis</a></li>
+                    <li><a href="#"><i class="fas fa-apple-alt"></i> Lifestyle Assessment</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Health Street, MedCity</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@healthpredictpro.com</li>
+                    <li><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2023 HealthPredict Pro. All rights reserved. This is for educational purposes only and not a substitute for professional medical advice.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

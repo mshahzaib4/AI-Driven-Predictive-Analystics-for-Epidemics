@@ -1,0 +1,1086 @@
+<!DOCTYPE html>ht<html lang="en">
+ <head>se    <meta charset="UTF-8">="    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthPredict Pro | AI Health Prediction System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        /* Floating Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateY(-3px);
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1));
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 30px 100px;
+            background: url('https://media.istockphoto.com/id/1299641330/photo/its-all-about-exceptional-healthcare.jpg?s=612x612&w=0&k=20&c=q5_Trir2hJMdzQS5FS7iNXJ-32zIQy1RDZ5mZcHtFJw=') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(120deg, rgba(229, 56, 59, 0.8), rgba(69, 123, 157, 0.8) 100%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 850px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero p {
+            font-size: 1.35rem;
+            color: rgba(255, 255, 255, 0.92);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transform: translateY(0);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1));
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-primary::before {
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+            transform: scaleX(0);
+            transform-origin: right;
+        }
+        
+        .btn-primary:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
+        }
+        
+        /* Services Section */
+        .section {
+            padding: 100px 30px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        
+        .section-title p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            color: #475569;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 5px;
+            background: var(--gradient);
+            border-radius: 10px;
+            margin: 25px auto;
+        }
+        
+        .services {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            width: 370px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .service-card.animate {
+            animation: fadeUp 0.8s ease forwards;
+        }
+        
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.3s; }
+        .service-card:nth-child(3) { animation-delay: 0.5s; }
+        
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-image {
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+        
+        .lung-card .card-image {
+            background-image: url('https://media.istockphoto.com/id/530196490/photo/3d-illustration-of-lungs-medical-concept.jpg?s=612x612&w=0&k=20&c=JWac3KM2myfIS5O8vcMXXnBlSQiOGeN7h2OZUvzwgPI=');
+        }
+        
+        .heart-card .card-image {
+            background-image: url('https://plus.unsplash.com/premium_photo-1717549106403-2d53a65728d2?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        }
+        
+        .liver-card .card-image {
+            background-image: url('https://media.istockphoto.com/id/1691926597/photo/human-body-with-liver-anatomy.jpg?s=612x612&w=0&k=20&c=PffmUxf-Co0G-4jKm_PLCiSTVNjRgNPSCSBXEWhf-yY=');
+        }
+        
+        .card-icon {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            color: white;
+            font-size: 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+        }
+        
+        .service-card:hover .card-icon {
+            transform: scale(1.1) rotate(15deg);
+            background: var(--gradient);
+        }
+        
+        .card-content {
+            padding: 30px;
+        }
+        
+        .card-content h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .card-content p {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+        
+        .card-content .btn {
+            padding: 12px 28px;
+            font-size: 1rem;
+        }
+        
+        /* Video Section - Modified for autoplay */
+        .video-section {
+            padding: 0 30px 100px;
+            position: relative;
+        }
+        
+        .video-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        <!DOCTYPE html>
+        <html lang="en">
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .video-container.playing .video-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            opacity: 1;
+            transition: opacity 0.6s ease;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .play-btn {
+            width: 90px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .video-container video {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .video-container:hover video {
+            transform: scale(1.05);
+        }
+        
+        .video-content {
+            max-width: 800px;
+            margin: 50px auto 0;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .video-content.animate {
+            animation: fadeUp 0.8s ease forwards;
+            animation-delay: 0.5s;
+        }
+        
+        .video-content h3 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .video-content p {
+            font-size: 1.2rem;
+            color: #475569;
+        }
+        
+        /* Stats Section */
+        .stats {
+            background: var(--gradient);
+            padding: 80px 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .stat-item {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .stat-item.animate {
+            animation: fadeUp 0.8s ease forwards;
+        }
+        
+        .stat-item:nth-child(1) { animation-delay: 0.1s; }
+        .stat-item:nth-child(2) { animation-delay: 0.3s; }
+        .stat-item:nth-child(3) { animation-delay: 0.5s; }
+        .stat-item:nth-child(4) { animation-delay: 0.7s; }
+        
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 80px 30px 40px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+        
+        .footer-col p {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--gradient);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 50px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+        
+        /* Video Controls */
+        .video-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        /* Autoplay indicator */
+        .autoplay-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .nav-links {
+                gap: 25px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 0 20px;
+            }
+            
+            .hero {
+                padding: 150px 20px 80px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.15rem;
+            }
+            
+            .section {
+                padding: 80px 20px;
+            }
+            
+            .section-title h2 {
+                font-size: 2.3rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-toggle {
+                display: block;
+                font-size: 1.8rem;
+                color: var(--dark);
+            }
+
+            .video-content h3 {
+                font-size: 1.8rem;
+            }
+            
+            .video-content p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="#" class="logo">
+                <i class="fas fa-heart-pulse"></i>
+                HealthPredict Pro
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="\" class="active">Home</a></li>
+                <li><a href="documentation">Documentation</a></li>
+                <li><a href="#video">How It Works</a></li>
+                <!-- <li><a href="#">About</a></li> -->
+                <li><a href="\profile">Contact</a></li>
+            </ul>
+            
+            <div class="nav-buttons">
+                <a href="#services" class="btn btn-primary">
+                    <i class="fas fa-stethoscope"></i> Check Health
+                </a>
+            </div>
+            
+            <!--<div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div> -->
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI Driven Predictive Analytics for Epidemics</h1>
+            <p>Early detection saves lives. Our cutting-edge AI analyzes your health data to predict potential risks and empower proactive healthcare decisions.</p>
+            <div class="hero-buttons">
+                <a href="#services" class="btn btn-primary">
+                    <i class="fas fa-stethoscope"></i> Check Your Health
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="section" id="services">
+        <div class="section-title">
+            <h2>Our Predictive Health Services</h2>
+            <p>Advanced AI models trained on thousands of medical cases to provide accurate risk assessments</p>
+        </div>
+        
+        <div class="services">
+            <div class="service-card lung-card">
+                <div class="card-image">
+                        <i class="fas fa-lungs"></i>
+                </div>
+                <div class="card-content">
+                    <h2>Lung Cancer Prediction</h2>
+                    <p>Assess your risk of lung cancer based on various health indicators and lifestyle factors. Early detection can significantly improve treatment outcomes.</p>
+                    <a href="/lung_cancer" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i> Check Risk
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card heart-card">
+                <div class="card-image">
+                        <i class="fas fa-heart"></i>
+                </div>
+                <div class="card-content">
+                    <h2>Heart Disease Prediction</h2>
+                    <p>Evaluate your cardiovascular health and get an assessment of your heart disease risk based on medical and lifestyle factors.</p><br>
+                    <a href="/heart_disease" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i> Check Risk
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card liver-card">
+                <div class="card-image">
+                        <i class="fas fa-liver"></i>
+                </div>
+                <div class="card-content">
+                    <h2>Liver Disease Prediction</h2>
+                    <p>Analyze your liver health indicators to detect potential liver disease. Get immediate feedback on your test results.</p><br>
+                    <a href="/liver_disease" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i> Check Risk
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Video Section -->
+    <section class="video-section" id="video">
+        <div class="video-container">
+            <video autoplay muted loop playsinline id="featureVideo">
+                <source src="https://cdn.pixabay.com/video/2020/09/13/49813-458438871_large.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="autoplay-indicator">
+                <i class="fas fa-volume-mute"></i> Autoplay enabled
+            </div>
+            <div class="video-overlay">
+                <div class="play-btn">
+                    <i class="fas fa-play"></i>
+                </div>
+            </div>
+            <div class="video-controls">
+                <div class="control-btn" id="playPauseBtn">
+                    <i class="fas fa-pause"></i>
+                </div>
+                <div class="control-btn" id="muteBtn">
+                    <i class="fas fa-volume-mute"></i>
+                </div>
+                <div class="control-btn" id="fullscreenBtn">
+                    <i class="fas fa-expand"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="video-content">
+            <h3>How Our Health Prediction System Works</h3>
+            <p>Discover how our AI-driven platform analyzes your health data to provide accurate risk assessments and actionable insights for prevention. Our technology combines medical expertise with cutting-edge machine learning algorithms to deliver personalized health predictions.</p>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Prediction Accuracy</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">50K+</div>
+                <div class="stat-label">Health Checks</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">27</div>
+                <div class="stat-label">Medical Experts</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">96%</div>
+                <div class="stat-label">User Satisfaction</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>HealthPredict Pro</h3>
+                <p>Advanced AI-powered health prediction system for early detection and prevention of serious medical conditions.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="\"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="\documentation"><i class="fas fa-chevron-right"></i>Documentation</a></li>
+                    <li><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="#video"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                    <li><a href="\profile"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Our Services</h3>
+                <ul class="footer-links">
+                    <li><a href="/lung_cancer"><i class="fas fa-lungs"></i> Lung Cancer Prediction</a></li>
+                    <li><a href="/heart_disease"><i class="fas fa-heart"></i> Heart Disease Prediction</a></li>
+                    <li><a href="/liver_disease"><i class="fas fa-liver"></i> Liver Disease Prediction</a></li>
+                    <li><a href="#"><i class="fas fa-dna"></i> Genetic Risk Analysis</a></li>
+                    <li><a href="#"><i class="fas fa-apple-alt"></i> Lifestyle Assessment</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Health Street, MedCity</li>
+                    <li><i class="fas fa-phone"></i> +92 (000) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> Shahzaibmalik0448@gmail.com/li>
+                    <li><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2023 HealthPredict Pro. All rights reserved. This is for educational purposes only and not a substitute for professional medical advice.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.service-card, .stat-item, .video-content');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if(elementPosition < screenPosition) {
+                    element.classList.add('animate');
+                }
+            });
+        }
+        
+        // Initial check on page load
+        window.addEventListener('load', animateOnScroll);
+        
+        // Check on scroll
+        window.addEventListener('scroll', animateOnScroll);
+        
+        // Video functionality
+        const video = document.getElementById('featureVideo');
+        const videoContainer = document.querySelector('.video-container');
+        const playBtn = document.querySelector('.play-btn');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        
+        // Hide overlay when video starts playing
+        video.addEventListener('playing', function() {
+            videoContainer.classList.add('playing');
+        });
+        
+        // Show overlay when video is paused
+        video.addEventListener('pause', function() {
+            videoContainer.classList.remove('playing');
+        });
+        
+        // Play button functionality
+        playBtn.addEventListener('click', function() {
+            video.play();
+            videoContainer.classList.add('playing');
+            // Try to unmute when user interacts
+            if(video.muted) {
+                video.muted = false;
+                document.querySelector('.autoplay-indicator').innerHTML = '<i class="fas fa-volume-up"></i> Sound enabled';
+            }
+        });
+        
+        // Play/Pause button
+        playPauseBtn.addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+                this.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                video.pause();
+                this.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+        
+        // Mute button
+        muteBtn.addEventListener('click', function() {
+            video.muted = !video.muted;
+            this.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+            document.querySelector('.autoplay-indicator').innerHTML = video.muted 
+                ? '<i class="fas fa-volume-mute"></i> Sound muted' 
+                : '<i class="fas fa-volume-up"></i> Sound enabled';
+        });
+        
+        // Fullscreen button
+        fullscreenBtn.addEventListener('click', function() {
+            if (videoContainer.requestFullscreen) {
+                videoContainer.requestFullscreen();
+            } else if (videoContainer.mozRequestFullScreen) { /* Firefox */
+                videoContainer.mozRequestFullScreen();
+            } else if (videoContainer.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                videoContainer.webkitRequestFullscreen();
+            } else if (videoContainer.msRequestFullscreen) { /* IE/Edge */
+                videoContainer.msRequestFullscreen();
+            }
+        });
+        
+        // Toggle controls on video click
+        video.addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                video.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Spacebar to play/pause
+            if (e.code === 'Space' && document.activeElement !== document.body) {
+                e.preventDefault();
+                if (video.paused) {
+                    video.play();
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    video.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            }
+            
+            // M key to mute/unmute
+            if (e.key === 'm' || e.key === 'M') {
+                video.muted = !video.muted;
+                muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+                document.querySelector('.autoplay-indicator').innerHTML = video.muted 
+                    ? '<i class="fas fa-volume-mute"></i> Sound muted' 
+                    : '<i class="fas fa-volume-up"></i> Sound enabled';
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>

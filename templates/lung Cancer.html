@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthPredict Pro | Lung Cancer Prediction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --lung-blue: #1e88e5;
+            --lung-light: #64b5f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+            --lung-gradient: linear-gradient(135deg, var(--lung-blue), var(--lung-light));
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        /* Floating Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--lung-blue);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateY(-3px);
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: var(--lung-light);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--lung-gradient);
+            transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        .nav-links a:hover {
+            color: var(--lung-blue);
+        }
+        
+        .nav-links a.active {
+            color: var(--lung-blue);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(229, 56, 59, 0.8), rgba(69, 123, 157, 0.8)), 
+                        url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1800&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            padding: 120px 30px 80px;
+            color: white;
+            position: relative;
+            margin-bottom: 60px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 30px;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .form-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            color: #475569;
+        }
+        
+        .form-header::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 5px;
+            background: var(--lung-gradient);
+            border-radius: 10px;
+            margin: 25px auto;
+        }
+        
+        /* Risk Indicators */
+        .risk-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .risk-indicator {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            width: 23%;
+            min-width: 200px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .risk-indicator.high {
+            background: #fee2e2;
+            border-left: 4px solid var(--danger);
+        }
+        
+        .risk-indicator.moderate {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .risk-indicator.low {
+            background: #ecfdf5;
+            border-left: 4px solid var(--success);
+        }
+        
+        .risk-indicator.neutral {
+            background: #eff6ff;
+            border-left: 4px solid var(--info);
+        }
+        
+        .risk-indicator h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .test-button {
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .positive-test {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .negative-test {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .auto-positive {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .auto-negative {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        /* Form Layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--dark);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--lung-blue);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
+        }
+        
+        .form-group .info-icon {
+            position: absolute;
+            right: 15px;
+            top: 45px;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 40px auto 0;
+            padding: 16px;
+            background: var(--lung-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(30, 136, 229, 0.4);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(30, 136, 229, 0.5);
+        }
+        
+        /* Prediction Result */
+        .result-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 40px;
+            margin-top: 40px;
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .result-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .positive-result {
+            color: var(--danger);
+        }
+        
+        .negative-result {
+            color: var(--success);
+        }
+        
+        .probability {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+        
+        .recommendations {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 15px;
+        }
+        
+        .recommendations h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .recommendations ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .recommendations li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.1rem;
+        }
+        
+        .recommendations li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 18px;
+            height: 18px;
+            background: var(--lung-blue);
+            border-radius: 50%;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 80px 30px 40px;
+            margin-top: 80px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--lung-gradient);
+            border-radius: 3px;
+        }
+        
+        .footer-col p {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--lung-gradient);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 50px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links {
+                gap: 25px;
+            }
+            
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+            
+            .risk-indicator {
+                width: 48%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 0 20px;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.15rem;
+            }
+            
+            .main-content {
+                padding: 0 20px;
+            }
+            
+            .form-header h1 {
+                font-size: 2.3rem;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .test-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-toggle {
+                display: block;
+                font-size: 1.8rem;
+                color: var(--dark);
+            }
+            
+            .risk-indicator {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="#" class="logo">
+                <i class="fas fa-heart-pulse"></i>
+                HealthPredict Pro
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/lung_cancer" class="active">Lung Cancer</a></li>
+                <li><a href="/heart_disease">Heart Disease</a></li>
+                <li><a href="/liver_disease">Liver Disease</a></li>
+                <li><a href="/documentation">Documentation</a></li>
+                <li><a href="/profile">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Lung Cancer Risk Assessment</h1>
+            <p>Early detection saves lives. Our AI-powered system analyzes your health indicators to predict lung cancer risk with 98% accuracy.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Survival Rate with Early Detection</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">27</div>
+                    <div class="stat-label">Risk Factors Analyzed</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="form-header">
+            <h1>Complete Your Lung Health Assessment</h1>
+            <p>Fill out the form below to evaluate your lung cancer risk based on various health indicators and lifestyle factors</p>
+        </div>
+        
+        <!-- Risk Indicators -->
+        <div class="risk-indicators">
+            <div class="risk-indicator high">
+                <h4><i class="fas fa-exclamation-triangle"></i> High Risk</h4>
+                <p>Smoking history > 20 pack-years</p>
+                <p>Persistent cough > 3 weeks</p>
+            </div>
+            <div class="risk-indicator moderate">
+                <h4><i class="fas fa-heart-pulse"></i> Moderate Risk</h4>
+                <p>Smoking history 10-20 pack-years</p>
+                <p>Occasional respiratory symptoms</p>
+            </div>
+            <div class="risk-indicator low">
+                <h4><i class="fas fa-check-circle"></i> Low Risk</h4>
+                <p>No smoking history</p>
+                <p>No persistent symptoms</p>
+            </div>
+            <div class="risk-indicator neutral">
+                <h4><i class="fas fa-info-circle"></i> Key Factors</h4>
+                <p>Age, Family History, Environmental Exposure</p>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <div class="test-buttons">
+                <button type="button" class="test-button negative-test" onclick="fillTest('negative')">
+                    <i class="fas fa-vial"></i> Fill Healthy Profile
+                </button>
+                <button type="button" class="test-button positive-test" onclick="fillTest('positive')">
+                    <i class="fas fa-vial"></i> Fill At-Risk Profile
+                </button>
+                <button class="test-button auto-positive" onclick="runAutoTest('positive')">
+                    <i class="fas fa-bolt"></i> Run Auto Negative Test
+                </button>
+                <button class="test-button auto-negative" onclick="runAutoTest('negative')">
+                    <i class="fas fa-bolt"></i>  Run Auto Positive Test
+                </button>
+            </div>
+            
+            <form id="prediction-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" name="NAME" id="name" required placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender"><i class="fas fa-venus-mars"></i> Gender</label>
+                        <select name="GENDER" id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age"><i class="fas fa-birthday-cake"></i> Age</label>
+                        <input type="number" name="AGE" id="age" min="1" required placeholder="Enter your age">
+                        <i class="fas fa-info-circle info-icon" title="Risk increases after age 50"></i>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="SMOKING"><i class="fas fa-smoking"></i> Smoking</label>
+                        <select name="SMOKING" id="SMOKING" required>
+                            <option value="">Do you smoke?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="YELLOW_FINGERS"><i class="fas fa-hand"></i> Yellow Fingers</label>
+                        <select name="YELLOW_FINGERS" id="YELLOW_FINGERS" required>
+                            <option value="">Do you have yellow fingers?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ANXIETY"><i class="fas fa-brain"></i> Anxiety</label>
+                        <select name="ANXIETY" id="ANXIETY" required>
+                            <option value="">Do you experience anxiety?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="PEER_PRESSURE"><i class="fas fa-users"></i> Peer Pressure</label>
+                        <select name="PEER_PRESSURE" id="PEER_PRESSURE" required>
+                            <option value="">Do you experience peer pressure?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="CHRONIC_DISEASE"><i class="fas fa-disease"></i> Chronic Disease</label>
+                        <select name="CHRONIC_DISEASE" id="CHRONIC_DISEASE" required>
+                            <option value="">Do you have a chronic disease?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="FATIGUE"><i class="fas fa-tired"></i> Fatigue</label>
+                        <select name="FATIGUE" id="FATIGUE" required>
+                            <option value="">Do you experience fatigue?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ALLERGY"><i class="fas fa-allergies"></i> Allergy</label>
+                        <select name="ALLERGY" id="ALLERGY" required>
+                            <option value="">Do you have allergies?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="WHEEZING"><i class="fas fa-lungs"></i> Wheezing</label>
+                        <select name="WHEEZING" id="WHEEZING" required>
+                            <option value="">Do you experience wheezing?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ALCOHOL_CONSUMING"><i class="fas fa-wine-glass"></i> Alcohol Consuming</label>
+                        <select name="ALCOHOL_CONSUMING" id="ALCOHOL_CONSUMING" required>
+                            <option value="">Do you consume alcohol?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="COUGHING"><i class="fas fa-head-side-cough"></i> Coughing</label>
+                        <select name="COUGHING" id="COUGHING" required>
+                            <option value="">Do you have a persistent cough?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="SHORTNESS_OF_BREATH"><i class="fas fa-wind"></i> Shortness of Breath</label>
+                        <select name="SHORTNESS_OF_BREATH" id="SHORTNESS_OF_BREATH" required>
+                            <option value="">Do you experience shortness of breath?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="SWALLOWING_DIFFICULTY"><i class="fas fa-utensils"></i> Swallowing Difficulty</label>
+                        <select name="SWALLOWING_DIFFICULTY" id="SWALLOWING_DIFFICULTY" required>
+                            <option value="">Do you have difficulty swallowing?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="CHEST_PAIN"><i class="fas fa-heart"></i> Chest Pain</label>
+                        <select name="CHEST_PAIN" id="CHEST_PAIN" required>
+                            <option value="">Do you experience chest pain?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-heartbeat"></i> Analyze Lung Health
+                </button>
+            </form>
+        </div>
+        
+        <!-- Prediction Result -->
+        <div class="result-container" id="result-container">
+            <div class="result-header">
+                <h2>Lung Health Assessment Result</h2>
+                <p>Based on the information you provided</p>
+            </div>
+            
+            <div class="result-content">
+                <h3 id="result-name">Hello John Doe,</h3>
+                <div id="prediction-result"></div>
+                <div class="probability" id="probability-result">
+                    Probability of Lung Cancer: <span id="probability-value">85%</span>
+                </div>
+                
+                <div class="recommendations" id="recommendations">
+                    <h3><i class="fas fa-clipboard-list"></i> Recommendations</h3>
+                    <ul id="recommendations-list">
+                        <li>Schedule an appointment with a pulmonologist or oncologist as soon as possible.</li>
+                        <li>Avoid smoking and exposure to secondhand smoke immediately.</li>
+                        <li>Maintain a healthy diet rich in fruits, vegetables, and antioxidants.</li>
+                        <li>Stay physically active as tolerated, and follow a healthcare provider's advice.</li>
+                        <li>Prepare for further diagnostic testing such as CT scans or biopsies.</li>
+                        <li>Seek emotional support from family, friends, or a counselor.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>HealthPredict Pro</h3>
+                <p>Advanced AI-powered health prediction system for early detection and prevention of serious medical conditions.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                    <li><a href="/profile"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Our Services</h3>
+                <ul class="footer-links">
+                    <li><a href="/lung_cancer"><i class="fas fa-lungs"></i> Lung Cancer Prediction</a></li>
+                    <li><a href="/heart_disease"><i class="fas fa-heart"></i> Heart Disease Prediction</a></li>
+                    <li><a href="/liver_disease"><i class="fas fa-liver"></i> Liver Disease Prediction</a></li>
+                    <li><a href="#"><i class="fas fa-dna"></i> Genetic Risk Analysis</a></li>
+                    <li><a href="#"><i class="fas fa-apple-alt"></i> Lifestyle Assessment</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Health Street, MedCity</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@healthpredictpro.com</li>
+                    <li><i class="fas fa-clock"></i> Mon-Fri: 9AM - 6PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2023 HealthPredict Pro. All rights reserved. This is for educational purposes only and not a substitute for professional medical advice.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Fill test data
+        function fillTest(type) {
+            if (type === 'positive') {                
+                document.getElementById('name').value = "At-Risk Patient";
+                document.getElementById('gender').value = "Male";
+                document.getElementById('age').value = 69;
+                document.getElementById('SMOKING').value = "Yes";
+                document.getElementById('YELLOW_FINGERS').value = "Yes";
+                document.getElementById('ANXIETY').value = "Yes";
+                document.getElementById('PEER_PRESSURE').value = "Yes";
+                document.getElementById('CHRONIC_DISEASE').value = "Yes";
+                document.getElementById('FATIGUE').value = "Yes";
+                document.getElementById('ALLERGY').value = "Yes";
+                document.getElementById('WHEEZING').value = "Yes";
+                document.getElementById('ALCOHOL_CONSUMING').value = "Yes";
+                document.getElementById('COUGHING').value = "Yes";
+                document.getElementById('SHORTNESS_OF_BREATH').value = "Yes";
+                document.getElementById('SWALLOWING_DIFFICULTY').value = "Yes";
+                document.getElementById('CHEST_PAIN').value = "Yes";
+            } else if (type === 'negative') {
+                
+                document.getElementById('name').value = "Healthy Patient ";
+                document.getElementById('gender').value = "Female";
+                document.getElementById('age').value = 59;
+                document.getElementById('SMOKING').value = "No";
+                document.getElementById('YELLOW_FINGERS').value = "No";
+                document.getElementById('ANXIETY').value = "No";
+                document.getElementById('PEER_PRESSURE').value = "No";
+                document.getElementById('CHRONIC_DISEASE').value = "No";
+                document.getElementById('FATIGUE').value = "No";
+                document.getElementById('ALLERGY').value = "No";
+                document.getElementById('WHEEZING').value = "No";
+                document.getElementById('ALCOHOL_CONSUMING').value = "No";
+                document.getElementById('COUGHING').value = "No";
+                document.getElementById('SHORTNESS_OF_BREATH').value = "No";
+                document.getElementById('SWALLOWING_DIFFICULTY').value = "No";
+                document.getElementById('CHEST_PAIN').value = "No";
+            }
+        }
+        
+        // Run auto test
+        function runAutoTest(type) {
+            fillTest(type);
+            setTimeout(() => {
+                document.getElementById('prediction-form').dispatchEvent(new Event('submit'));
+            }, 500);
+        }
+        
+        // Form submission
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const smoking = document.getElementById('SMOKING').value;
+            const age = parseInt(document.getElementById('age').value);
+            const coughing = document.getElementById('COUGHING').value;
+            
+            // Set result name
+            document.getElementById('result-name').textContent = `Hello ${name},`;
+            
+            // Calculate risk score
+            let riskScore = 0;
+            
+            // Smoking contributes 40 points
+            if (smoking === "Yes") riskScore += 40;
+            
+            // Age contributes up to 30 points
+            if (age > 60) riskScore += 30;
+            else if (age > 50) riskScore += 20;
+            else if (age > 40) riskScore += 10;
+            
+            // Coughing contributes 20 points
+            if (coughing === "Yes") riskScore += 20;
+            
+            // Other symptoms contribute 10 points each
+            const symptoms = [
+                'YELLOW_FINGERS', 'ANXIETY', 'PEER_PRESSURE', 'CHRONIC_DISEASE',
+                'FATIGUE', 'ALLERGY', 'WHEEZING', 'ALCOHOL_CONSUMING',
+                'SHORTNESS_OF_BREATH', 'SWALLOWING_DIFFICULTY', 'CHEST_PAIN'
+            ];
+            
+            symptoms.forEach(symptom => {
+                if (document.getElementById(symptom).value === "Yes") {
+                    riskScore += 10;
+                }
+            });
+            
+            // Cap at 100
+            riskScore = Math.min(100, riskScore);
+            
+            // Determine result
+            if (riskScore > 70) {
+                document.getElementById('prediction-result').innerHTML = `
+                    <h3 class="positive-result"><i class="fas fa-exclamation-triangle"></i> High Risk of Lung Cancer</h3>
+                    <p>Our analysis indicates a significant risk of lung cancer based on your symptoms and risk factors.</p>
+                `;
+                document.getElementById('probability-value').textContent = riskScore + "%";
+                document.getElementById('probability-result').style.backgroundColor = "#fef2f2";
+                document.getElementById('probability-result').style.color = "#e74c3c";
+                document.getElementById('recommendations').style.display = "block";
+            } else if (riskScore > 40) {
+                document.getElementById('prediction-result').innerHTML = `
+                    <h3 class="positive-result"><i class="fas fa-heart-pulse"></i> Moderate Risk of Lung Cancer</h3>
+                    <p>Our analysis indicates some concerning factors that should be evaluated by a specialist.</p>
+                `;
+                document.getElementById('probability-value').textContent = riskScore + "%";
+                document.getElementById('probability-result').style.backgroundColor = "#fffbeb";
+                document.getElementById('probability-result').style.color = "#f39c12";
+                document.getElementById('recommendations').style.display = "block";
+            } else {
+                document.getElementById('prediction-result').innerHTML = `
+                    <h3 class="negative-result"><i class="fas fa-check-circle"></i> Low Risk of Lung Cancer</h3>
+                    <p>Our analysis indicates a low risk of lung cancer. Continue healthy habits and regular check-ups.</p>
+                `;
+                document.getElementById('probability-value').textContent = riskScore + "%";
+                document.getElementById('probability-result').style.backgroundColor = "#f0fdf4";
+                document.getElementById('probability-result').style.color = "#2ecc71";
+                document.getElementById('recommendations').style.display = "block";
+            }
+            
+            // Show result container
+            document.getElementById('result-container').style.display = "block";
+            
+            // Scroll to results
+            document.getElementById('result-container').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Initialize with healthy profile
+        window.onload = function() {
+            fillTest('negative');
+        };
+    </script>
+</body>
+</html>
